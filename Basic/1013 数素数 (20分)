@@ -1,0 +1,25 @@
+#include<stdio.h>
+bool pnum[1000001]={0};
+int prime[1000001]={};
+void Find_Prime(int n)
+{
+	int num=0;
+  for(int i=2;i<=1000001;i++)
+  if(pnum[i]==false)
+  {
+    for(int j=i+i;j<=1000001;j+=i)
+      pnum[j]=true;
+    prime[num++]=i;
+    if(num>n)break;
+  }
+}
+int main()
+{
+  int m=0,n=0;
+  scanf("%d %d",&m,&n);
+  Find_Prime(n);
+  for(int j=m-1,i=1;j<n;j++)
+  if((i++)%10==0||j==n-1)printf("%d\n",prime[j]);
+  else printf("%d ",prime[j]);
+  return 0;
+}
