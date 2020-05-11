@@ -1,0 +1,102 @@
+#include<iostream>
+#include<string>
+#include<string.h>
+#include<algorithm>
+#include<vector>
+using namespace std;
+struct stu{
+	string id;
+	int date;
+	int score;
+	int num_test_room;
+}temp;
+struct st{
+	int order_test_room;
+	int num;
+}st_temp;
+bool cmp1(stu a,stu b)
+{
+	if(a.score!=b.score)return a.score>b.score;
+	else return strcmp(a.id.c_str(),b.id.c_str())<0;
+}
+bool cmp2(st a,st b)
+{
+	if(a.num!=b.num)return a.num>b.num;
+	else return a.order_test_room<b.order_test_room;
+}
+int main()
+{
+	vector<stu>v;
+	int m,n;
+	cin>>m>>n;
+	string str;
+	for(int i=0;i<m;i++)
+	{
+		cin>>temp.id>>temp.score;
+		for(int j=4;j<10;j++)str=str+temp.id[j];
+		sscanf(str.c_str(),"%d",&temp.date);
+		str.clear();
+		for(int j=1;j<4;j++)str=str+temp.id[j];
+		sscanf(str.c_str(),"%d",&temp.num_test_room);
+		str.clear();
+		v.push_back(temp);
+	}
+	getchar();
+	for(int i=0;i<n;i++)
+	{
+		getline(cin,str);
+		printf("Case %d: %s\n",i+1,str.c_str());
+		switch(str[0]){
+		case '1':{
+		    vector<stu>res;
+		    for(int j=0;j<v.size();j++)
+    			if(str[2]==v[j].id[0])res.push_back(v[j]);
+		    if(res.size()!=0){
+			    sort(res.begin(),res.end(),cmp1);
+				for(int j=0;j<res.size();j++)
+					printf("%s %d\n",res[j].id.c_str(),res[j].score);
+			}
+		    else printf("NA\n");
+				 }
+				 break;
+		case '2':{
+			string temp_str;
+			int temp_str_int,full=0,count=0;
+			for(int j=2;j<5;j++)temp_str=temp_str+str[j];
+			sscanf(temp_str.c_str(),"%d",&temp_str_int);
+			for(int j=0;j<v.size();j++)
+				if(v[j].num_test_room==temp_str_int){
+					full+=v[j].score;
+					count++;
+				}
+			if(count!=0)printf("%d %d\n",count,full);
+			else printf("NA\n");
+		}
+				 break;
+		default:{
+			string temp_str;
+			int temp_str_int;
+			int flag_room[1000]={0};
+			vector<st>v_st;
+			for(int j=2;j<8;j++)temp_str=temp_str+str[j];
+			sscanf(temp_str.c_str(),"%d",&temp_str_int);
+			for(int j=0;j<v.size();j++)
+				if(v[j].date==temp_str_int)flag_room[v[j].num_test_room]++;
+			for(int j=0;j<1000;j++)//检测这个花括号去掉后的效果
+				if(flag_room[j]!=0){
+					st_temp.num=flag_room[j];
+					st_temp.order_test_room=j;
+					v_st.push_back(st_temp);
+				}
+			
+			if(v_st.size()!=0){
+				sort(v_st.begin(),v_st.end(),cmp2);
+				for(int j=0;j<v_st.size();j++)printf("%03d %d\n",v_st[j].order_test_room,v_st[j].num);
+			}
+			else printf("NA\n");
+
+				 }
+    	}
+	}
+    return 0;
+}
