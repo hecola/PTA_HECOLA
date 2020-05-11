@@ -1,0 +1,80 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<string.h>
+#include<vector>
+#include<map>
+#include<math.h>
+using namespace std;
+struct sch{
+	vector<int>t;
+	vector<int>a;
+	vector<int>b;
+	int full;
+	sch(){
+		full=0;
+	}
+};
+struct flag{
+	int full;
+	int num_stu;
+	string name;
+	flag(){
+		full=0;num_stu=0;name="";
+	}
+};
+bool cmp(flag a,flag b)
+{
+	if(a.full!=b.full)return a.full>b.full;
+	else{
+		if(a.num_stu!=b.num_stu)return a.num_stu<b.num_stu;
+		else return strcmp(a.name.c_str(),b.name.c_str())<0;
+	}
+}
+int main()
+{
+	int n=0;
+	cin>>n;
+	string id,sch_nam;
+	int temp;
+	map<string,sch>mp;
+	for(int i=0;i<n;i++)
+	{
+		cin>>id>>temp>>sch_nam;
+		for(int j=0;j<sch_nam.size();j++)
+			if(sch_nam[j]>='A'&&sch_nam[j]<='Z')sch_nam[j]=sch_nam[j]+32;
+		switch(id[0]){
+	    	case 'T':mp[sch_nam].t.push_back(temp);break;
+	    	case 'A':mp[sch_nam].a.push_back(temp);break;
+	    	default:mp[sch_nam].b.push_back(temp);
+	 	}
+	}
+	for(map<string,sch>::iterator it=mp.begin();it!=mp.end();it++)
+	{
+		int t_total=0,a_total=0,b_total=0;
+		for(int i=0;i<it->second.t.size();i++)t_total+=it->second.t[i];
+		for(int i=0;i<it->second.a.size();i++)a_total+=it->second.a[i];
+		for(int i=0;i<it->second.b.size();i++)b_total+=it->second.b[i];
+		it->second.full=floor(t_total*1.5+a_total+b_total/1.5);
+	}
+	vector<flag>v(mp.size());
+	int k=0;
+	for(map<string,sch>::iterator it=mp.begin();it!=mp.end();it++,k++)
+	{
+		temp=0;
+		temp=it->second.t.size()+it->second.a.size()+it->second.b.size();
+		v[k].num_stu=temp;
+		v[k].full=it->second.full;
+		v[k].name=v[k].name+it->first;//对此处进行测试看能不能直接赋值
+	}
+	sort(v.begin(),v.end(),cmp);
+    printf("%d\n",v.size());
+    int pre=-1,rank=0;
+	for(int i=0;i<v.size();i++)
+	{
+        if(pre!=v[i].full)rank=i+1;
+        pre=v[i].full;
+		printf("%d %s %d %d\n",rank,v[i].name.c_str(),v[i].full,v[i].num_stu);
+    }
+    return 0;
+}
