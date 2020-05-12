@@ -1,0 +1,37 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+int main()
+{
+	int a, b;
+	cin >> a >> b;
+	char result[10];
+	sprintf(result, "%d", a + b);
+	//printf("%s\n", result);
+	int len = strlen(result);
+	if (result[0] == '-'){
+		printf("-");
+		for (int j = 1; j <= len; ++j)result[j - 1] = result[j];
+	}
+	len = strlen(result);
+	if (len <= 3)printf("%s", result);
+	else{
+		int circle = len / 3, front_num = len % 3, i = len, k = 0;
+		while (i > 0){
+			while(front_num > 0){
+				printf("%c", result[k++]);
+				i--;
+				front_num--;
+				if (front_num == 0)printf(",");
+			}
+			for (int count = 0; count < 3&&k<len; ++count)
+			{
+				printf("%c", result[k++]);
+				i--;
+			}
+			if (circle > 1)printf(",");
+			circle--;		
+		}
+	}
+	return 0;
+}
