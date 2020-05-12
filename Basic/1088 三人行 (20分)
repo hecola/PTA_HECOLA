@@ -1,0 +1,56 @@
+#include<iostream>
+#include<algorithm>
+#include<string.h>
+#include<math.h>
+#include<vector>
+using namespace std;
+struct ans{
+	int j;
+	int y;
+	double b;
+	ans(){
+		j=0;y=0;b=0;
+	}
+};
+bool cmp(ans a,ans b)
+{
+	return a.j>b.j;
+}
+int main()
+{
+	char temp[3];
+	ans node;
+	int me=0,x=0,y=0;
+    double sub=0;
+	cin>>me>>x>>y;
+	vector<ans>v;
+	for(int i=10;i<=99;i++)
+	{
+		bool flag=0;
+		node.j=i;
+		node.y=i%10*10+i/10;
+		sub=abs(node.j-node.y)*1.0/x;
+		if(sub*y-(double)node.y==0){
+			flag=1;
+			node.b=node.y*1.0/y;
+		}
+		if(flag==1)v.push_back(node);
+	}
+	if(v.size()==0)printf("No Solution");
+	else{
+		sort(v.begin(),v.end(),cmp);
+		printf("%d ",v[0].j);
+		if(v[0].j>me)printf("Cong ");
+		else if(v[0].j==me)printf("Ping ");
+		else printf("Gai ");
+
+		if(v[0].y>me)printf("Cong ");
+		else if(v[0].y==me)printf("Ping ");
+		else printf("Gai ");
+
+		if(v[0].b>me)printf("Cong");
+		else if(v[0].b==me)printf("Ping");
+		else printf("Gai");
+	}
+    return 0;
+}
