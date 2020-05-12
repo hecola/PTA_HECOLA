@@ -1,0 +1,80 @@
+#include<iostream>
+#include<cstdio>
+#include<string>
+using namespace std;
+int main()
+{
+    int shuffle_count=0,num_temp=0;
+    char temp_temp[10]={'\0'};
+    string temp;
+    string premutation1[54],premutation2[54];
+    int order[54]={0};
+    for(int i=0;i<54;i++)
+    {
+        if(i>=0&&i<=12){
+            premutation1[i]="S";
+            num_temp=i+1;
+            sprintf(temp_temp,"%d",num_temp);//将数字转化为字符串最安全的方法就是，先使用sprintf把数字转化至字符数组，再将字符数组转化为字符串
+            temp=temp_temp;
+            premutation1[i]+=temp;
+        }
+        else if(i>=13&&i<=25){
+            premutation1[i]="H";
+            num_temp=(i+1==26)?13:(i+1)%13;//在余数为模值的时候，会取不到模值
+            sprintf(temp_temp,"%d",num_temp);
+            temp=temp_temp;
+            premutation1[i]+=temp;
+        }
+        else if(i>=26&&i<=38){
+            premutation1[i]="C";
+            num_temp=(i+1==39)?13:(i+1)%13;
+            sprintf(temp_temp,"%d",num_temp);
+            temp=temp_temp;
+            premutation1[i]+=temp;
+        }
+        else if(i>=39&&i<=51){
+            premutation1[i]="D";
+            num_temp=(i+1==52)?13:(i+1)%13;
+            sprintf(temp_temp,"%d",num_temp);
+            temp=temp_temp;
+            premutation1[i]+=temp;
+        }
+        else if(i>=52&&i<=53){
+            premutation1[i]="J";
+            num_temp=(i+1)%52;
+            sprintf(temp_temp,"%d",num_temp);
+            temp=temp_temp;
+            premutation1[i]+=temp;
+        }
+    }
+    scanf("%d",&shuffle_count);
+    for(int i=0;i<54;i++)scanf("%d",order+i);
+    for(int j=1;j<=shuffle_count;j++)
+    for(int i=0;i<54;i++)
+    {
+        if(j%2==1){
+            num_temp=order[i]-1;//千万注意数组越界
+            premutation2[num_temp]=premutation1[i];
+        }
+        else {
+            num_temp=order[i]-1;
+            premutation1[num_temp]=premutation2[i];
+        }
+    }
+    if(shuffle_count%2==1)
+    {
+        for(int i=0;i<54;i++)
+        {
+            if(i==53)cout<<premutation2[i];
+            else cout<<premutation2[i]<<' ';
+        }
+    }
+    else{
+        for(int i=0;i<54;i++)
+        {
+            if(i==53)cout<<premutation1[i];
+            else cout<<premutation1[i]<<' ';
+        }
+    }
+    return 0;
+}
