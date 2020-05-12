@@ -1,0 +1,55 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	char flag,ch,temp;
+	string c_res,d_res;
+	cin>>flag;
+	getchar();
+	if(flag=='C'){
+		int count=1;
+		ch=getchar();
+		while(ch!='\n'){
+			temp=getchar();
+			while(temp==ch)
+			{
+				count++;
+				temp=getchar();
+			}
+			if(count!=1){
+				char s1[10];
+				sprintf(s1,"%d",count);
+			    c_res=c_res+s1+ch;
+				ch=temp;
+			    count=1;
+			}
+			else{
+			    c_res=c_res+ch;
+			    ch=temp;
+			}
+		}
+	}
+	else{//D
+		string s;
+		getline(cin,s);
+		int count=0;
+		for(int i=0;i<s.size();i++)
+		{
+			if(s[i]<='9'&&s[i]>='0'){
+				while(s[i]<='9'&&s[i]>='0'){
+					count=count*10+s[i]-'0';
+			    	i++;
+				}
+				while(count!=0){
+					d_res=d_res+s[i];
+					count--;
+				}
+			}
+			else d_res=d_res+s[i];
+		}
+	}
+	if(flag=='C')printf("%s",c_res.c_str());
+	else printf("%s",d_res.c_str());
+    return 0;
+}
