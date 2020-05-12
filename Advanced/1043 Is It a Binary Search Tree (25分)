@@ -1,0 +1,127 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+using namespace std;
+const int maxn=50;
+struct node{
+  int data;
+  node* lchild;
+  node* rchild;
+}Tree[2000];
+int n=0,loc=0;
+vector<int>list[4];
+node *creat(){
+	Tree[loc].lchild = Tree[loc].rchild = NULL;
+	return &Tree[loc++];
+}
+node* insert(node *root, int temp_data){
+	if (root== NULL){
+		root= creat();
+		root->data= temp_data;
+	}
+	else{
+		if (temp_data< root->data)
+			root->lchild = insert(root->lchild, temp_data);
+		else
+			root->rchild = insert(root->rchild, temp_data);
+	}
+	return root;
+}
+void preorder(node* root)
+{
+  if(root!=NULL)
+  {
+    list[0].push_back(root->data);
+    preorder(root->lchild);
+    preorder(root->rchild);
+  }
+  else return;
+}
+void mirror_preorder(node* root)
+{
+  if(root!=NULL)
+  {
+    list[1].push_back(root->data);
+    mirror_preorder(root->rchild);
+    mirror_preorder(root->lchild);
+  }
+  else return;
+}
+void postorder(node* root)
+{
+  if(root!=NULL)
+  {
+    postorder(root->lchild);
+    postorder(root->rchild);
+    list[2].push_back(root->data);
+  }
+  else return;
+}
+void mirror_postorder(node* root)
+{
+  if(root!=NULL)
+  {
+    mirror_postorder(root->rchild);
+    mirror_postorder(root->lchild);
+    list[3].push_back(root->data);
+  }
+  else return;
+}
+/*void delete_root(node* &root)
+{
+  if(root==NULL)return;
+  else{
+    
+    if(root->lchild!=NULL)
+    {
+      delete_root(root->lchild);
+			root->lchild=NULL;
+  	}
+  	if(root->rchild!=NULL){
+  	  delete_root(root->rchild);
+  	  root->rchild=NULL;
+  	}
+  	if(root->lchild==NULL&&root->rchild==NULL)delete root;
+	}
+}*/
+int main()
+{
+  int insert_array[maxn];
+  vector<node>vi;
+  bool flag[2]={0};
+  scanf("%d",&n);
+  node* root=NULL;//从栈中连接到堆中，是否要对堆中的内存进行释放
+  for(int i=0;i<n;i++)
+  {
+    scanf("%d",&insert_array[i]);
+    insert(root,insert_array[i]);
+  }
+//  creat(insert_array,root);
+  preorder(root);
+  mirror_preorder(root);
+  postorder(root);
+  mirror_postorder(root);
+  for(int j=0;j<2;j++)//为了比较原始树与镜像树的序列是否与输入序列完全一致
+   {
+     int i=0;//在两次循环中的i 被定义了两次，那第一次与第二次的i应该是在不同的内存区域了
+     for(i=0;i<n;i++)
+     if(list[j][i]!=insert_array[i])break;
+     if(i==n)flag[j]=true;
+   } 
+  if(flag[0]==false&&flag[1]==false) printf("NO");
+  else if(!(flag[0]==true&&flag[1]==true))
+      for(int i=0;i<2;i++)//根据上面的判断结果也就是flag来输出对应的序列
+       {
+          if(flag[i]==true)
+          {
+               printf("YES\n");
+               for(int j=0;j<n;j++)
+              {
+               if(j==n-1)printf("%d",list[2+i][j]);
+               else printf("%d ",list[2+i][j]);
+               }
+           }
+       }
+ // delete_root(root);
+  return 0;
+}
