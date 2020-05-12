@@ -1,0 +1,32 @@
+
+#include<iostream>
+using namespace std;
+int main()
+{
+    int num;
+    string str;
+    cin>>str>>num;
+    for(int i=0;i<num-1;i++)
+    {
+        string temp;
+        for(int j=0;j<str.size();j++)
+        {
+            int count=1;
+            char ch[5];
+            while(j<str.size()-1&&str[j]==str[j+1]){
+                count++;
+                j++;
+            }
+            if(count>=2){
+                sprintf(ch,"%d",count);
+                temp=temp+str[j]+ch;
+            }
+            else temp=temp+str[j]+'1';
+        }
+        str.clear();
+        str=str+temp;
+    }
+    printf("%s",str.c_str());
+    return 0;
+}
+
