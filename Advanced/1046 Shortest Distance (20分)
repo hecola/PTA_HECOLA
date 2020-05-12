@@ -1,0 +1,35 @@
+#include<cstdio>
+int main()
+{
+    int array[100001]={0},dintance_point[100001]={0},num_array=0,num_pair=0,position1_pair=0,position2_pair=0,min=0,sum=0,temp=0,sum_all=0;
+    scanf("%d",&num_array);
+    for(int i=0;i<num_array;i++)
+    {
+        scanf("%d",array+i);
+        dintance_point[i]=sum_all;
+        sum_all+=array[i];
+    }
+    scanf("%d",&num_pair);
+    for(int i=0;i<num_pair;i++)
+    {
+        scanf("%d %d",&position1_pair,&position2_pair);
+        if(position1_pair==position2_pair)
+        {
+            if(i==num_pair-1)printf("0");
+            else printf("0\n");
+        }
+        else{
+            if(position1_pair>position2_pair){
+                temp=position1_pair;
+                position1_pair=position2_pair;
+                position2_pair=temp;
+            }
+            sum=dintance_point[position2_pair-1]-dintance_point[position1_pair-1];
+            min=sum_all-sum;
+            if(sum<min)min=sum;
+            if(i==num_pair-1)printf("%d",min);
+            else printf("%d\n",min);
+        }
+    }
+    return 0;
+}
