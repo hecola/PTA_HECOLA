@@ -1,0 +1,38 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+struct node{
+	int data;
+	int next;
+}list[100000];
+int main()
+{
+	int start=0,num=0,k=0;
+	cin>>start>>num>>k; 
+	int temp;
+	for(int i=0;i<num;i++)
+	{
+		scanf("%d ",&temp);
+		scanf("%d %d",&list[temp].data,&list[temp].next);
+	}
+	temp=start;
+	vector<int>v[3];
+	while(temp!=-1){
+		if(list[temp].data<0)v[0].push_back(temp);
+		else if(list[temp].data>k)v[2].push_back(temp);
+		else v[1].push_back(temp);
+		temp=list[temp].next;
+	}
+    bool flag=0;
+	for(int i=0;i<3;i++)
+		for(int j=0;j<v[i].size();j++)
+		{
+			if(flag==0){
+                printf("%05d %d ",v[i][j],list[v[i][j]].data);
+                flag=1;
+                }
+			else printf("%05d\n%05d %d ",v[i][j],v[i][j],list[v[i][j]].data);
+		}
+	printf("-1");
+    return 0;
+}
