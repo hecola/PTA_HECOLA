@@ -1,0 +1,46 @@
+#include<iostream>
+#include<algorithm>
+//#include<string>
+using namespace std;
+string add(string s1,string s2)
+{
+	string num=s1;
+	int carry=0;
+	for(int i=s1.size()-1;i>=0;i--)
+	{
+		num[i]=(s1[i]-'0'+s2[i]-'0'+carry)%10+'0';
+		carry=(s1[i]-'0'+s2[i]-'0'+carry)/10;
+	}
+	if(carry!=0){
+		char ch=carry+'0';
+		num=ch+num;
+	}
+	return num;
+}
+int main()
+{
+	string num,temp1,temp2;
+	getline(cin,num);
+	int count=0;
+	bool flag=0;
+	while(true){
+		count++;
+		temp1=num;
+		reverse(temp1.begin(),temp1.end());
+		temp2=add(num,temp1);
+		if(temp1==num&&count<=11){
+            flag=1;
+            break;  
+        }
+		else {
+			if(count<=10)printf("%s + %s = %s\n",num.c_str(),temp1.c_str(),temp2.c_str());
+			else {
+				printf("Not found in 10 iterations.");
+				break;
+			}
+		}
+		num=temp2;
+	}
+	if(flag==1)printf("%s is a palindromic number.",temp1.c_str());
+    return 0;
+}
