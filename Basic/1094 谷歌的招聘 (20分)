@@ -1,0 +1,39 @@
+#include<iostream>
+#include<string>
+#include<map>
+using namespace std;
+const int maxn=1000000000;
+bool find_prime(int n)
+{
+    if(n==0||n==1)return false;
+    for(int i=2;i*i<n;i++)
+    if(n%i==0)return false;
+    return true;
+}
+int main()
+{
+	int res_len=-1,num_len=-1;
+	cin>>num_len>>res_len;
+	//getchar();//测试getchar()去掉后，也就是getline会不会忽略缓冲区的空字符
+	string num;
+	cin>>num;
+	for(int i=0;i+res_len-1<num_len;i++)
+	{
+		string temp_string;
+		int temp_int;
+		char ch;
+		for(int j=0;j<res_len;j++)
+		{
+			ch=num[i+j];
+			temp_string=temp_string+ch;
+		}
+		sscanf(temp_string.c_str(),"%d",&temp_int);
+		if(find_prime(temp_int)==1){
+			printf("%0*d",res_len,temp_int);
+			return 0;
+		}
+	}
+	printf("404");
+	system("pause");
+    return 0;
+}
