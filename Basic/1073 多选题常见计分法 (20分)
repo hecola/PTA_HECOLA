@@ -1,0 +1,114 @@
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+struct stan_ans{
+	int choice_num;
+	int ans_num;
+	map<char,int>char_stan_ans;
+	map<char,int>wrong_ans;
+	int score;
+	stan_ans(){
+		choice_num=0;ans_num=0;score=0;//char_stan_ans[5]={};
+	}
+};
+int main()
+{
+	int num=0,stu=0;
+	scanf("%d %d",&stu,&num);
+	vector<stan_ans>v(num);
+	for(int i=0;i<num;i++)
+	{
+		scanf("\n");
+		int temp_score,temp_choice_num,temp_right_num;
+		scanf("%d %d %d ",&temp_score,&temp_choice_num,&temp_right_num);
+		v[i].ans_num=temp_right_num;
+		v[i].choice_num=temp_choice_num;
+		v[i].score=temp_score;
+		for(int j=0;j<temp_right_num;j++)
+		{
+			char c;
+			if(j==temp_right_num-1)scanf("%c",&c);
+			else scanf("%c ",&c);
+			v[i].char_stan_ans[c]=1;
+		}
+	}
+	vector<double>stu_score(stu);
+	for(int i=0;i<stu;i++)
+	{
+		scanf("\n");
+		for(int j=0;j<num;j++)
+		{
+			int s_num;
+			if(j!=0)scanf(" ");
+			scanf("(%d ",&s_num);
+			int count=0;
+			bool flag=0;
+			if(s_num<=v[j].ans_num){
+				for(int k=0;k<s_num;k++)
+				{
+					char c;
+				    if(k!=s_num-1)scanf("%c ",&c);
+				    else scanf("%c)",&c);
+					if(v[j].char_stan_ans[c]!=1){
+						v[j].wrong_ans[c]++;
+						v[j].char_stan_ans.erase(v[j].char_stan_ans.find(c));
+						flag=1;
+					}
+					else {
+						count++;
+						v[j].char_stan_ans[c]++;		
+					}
+			    }
+				if(flag==0)
+				{
+					if(count<v[j].ans_num)stu_score[i]+=v[j].score*1.0/2;
+					else stu_score[i]+=v[j].score;
+				}
+		   }
+			else{
+				for(int k=0;k<s_num;k++)
+				{
+					char c;
+				    if(k!=s_num-1)scanf("%c ",&c);
+				    else scanf("%c)",&c);
+					if(v[j].char_stan_ans[c]!=1){
+						v[j].wrong_ans[c]++;
+						v[j].char_stan_ans.erase(v[j].char_stan_ans.find(c));
+					}
+					else v[j].char_stan_ans[c]++;
+			    }
+			}
+			for(map<char,int>::iterator it=v[j].char_stan_ans.begin();it!=v[j].char_stan_ans.end();it++)
+					if(v[j].char_stan_ans[it->first]==1)v[j].wrong_ans[it->first]++;
+			for(map<char,int>::iterator it=v[j].char_stan_ans.begin();it!=v[j].char_stan_ans.end();it++)
+				it->second=1;
+		}	
+	}
+	int max=-1;
+	for(int i=0;i<num;i++)
+	{
+		for(map<char,int>::iterator it=v[i].wrong_ans.begin();it!=v[i].wrong_ans.end();it++)
+			if(it->second>max)max=it->second;
+	}
+	int count=0;
+	for(int i=0;i<num;i++)
+	{
+		for(map<char,int>::iterator it=v[i].wrong_ans.begin();it!=v[i].wrong_ans.end();it++)
+			if(it->second==max)count++;
+	}
+	for(int i=0;i<stu;i++)
+		printf("%.1lf\n",stu_score[i]);
+	if(count!=0){
+		int j=0;
+		for(int i=0;i<num;i++)
+			for(map<char,int>::iterator it=v[i].wrong_ans.begin();it!=v[i].wrong_ans.end();it++)
+				if(it->second==max){
+					if(j==count-1)printf("%d %d-%c",max,i+1,it->first);
+					else printf("%d %d-%c\n",max,i+1,it->first);
+					j++;
+				}
+	}
+	else printf("Too simple");
+    return 0;
+}
