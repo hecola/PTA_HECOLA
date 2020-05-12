@@ -1,0 +1,58 @@
+#include<cstdio>
+#include<iostream>
+#include<queue>
+using namespace std;
+const int maxn=29;
+struct node{
+  int data;
+  node* lchild;
+  node* rchild;
+};
+int n=0,printed=0;
+int post[maxn],mid[maxn];
+void write(int array[])
+{
+  for(int j=0;j<n;j++)
+  scanf("%d",&array[j]);
+}
+node* creat(int postl,int postr,int midl,int midr)
+{
+  if(postl>postr)return NULL;
+  node* root=new node;
+  root->data=post[postr];
+  int k=0;
+  for(k=0;k<n;k++)
+  if(post[postr]==mid[k])break;
+  int num=k-midl;//左子树的节点数
+  root->lchild=creat(postl,postl+num-1,midl,midl+num-1);
+  root->rchild=creat(postl+num,postr-1,midl+num+1,midr);
+  return root;
+}
+void output(node* root)//不考虑空树
+{
+  queue<node*>q;
+  q.push(root);
+  node* temp=new node;
+  while(!q.empty())
+    {
+      temp=q.front();
+      q.pop();
+      if(printed!=n-1){
+        printf("%d ",temp->data);
+        printed++;
+      }
+      else printf("%d",temp->data);
+      if(temp->lchild!=NULL)q.push(temp->lchild);
+      if(temp->rchild!=NULL)q.push(temp->rchild);
+    }
+}
+int main()
+{
+  node* root=new node;
+  scanf("%d",&n);
+  write(post);
+  write(mid);
+  root=creat(0,n-1,0,n-1);
+  output(root);
+  return 0;
+}
