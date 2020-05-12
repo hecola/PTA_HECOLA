@@ -1,0 +1,78 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<string.h>
+#include<math.h>
+#include<vector>
+#include<map>
+using namespace std;
+struct stu{
+	int gp;
+	int gm;
+	int gf;
+	int g;
+	bool flag;
+	stu(){
+		gp=gm=gf=g=-1;
+		flag=0;
+	}
+};
+struct pa{
+	string str;
+	int score;
+};
+bool cmp(pa s1,pa s2)
+{
+	if(s1.score!=s2.score)return s1.score>s2.score;
+	else return strcmp(s1.str.c_str(),s2.str.c_str())<0;
+}
+int main()
+{
+	int p,m,n;
+	cin>>p>>m>>n;
+	map<string,stu>mp;
+	string id;
+	int score=0;
+	for(int i=0;i<p;i++)//研究清楚用cin输入时，其与空字符的效果
+	{
+		cin>>id>>score;
+		mp[id].gp=score;
+	}
+	for(int i=0;i<m;i++)
+	{
+		cin>>id>>score;
+		mp[id].gm=score;
+	}
+	for(int i=0;i<n;i++)
+	{
+		cin>>id>>score;
+		mp[id].gf=score;
+	}
+	for(map<string,stu>::iterator it=mp.begin();it!=mp.end();it++)
+	{
+		if(it->second.gp>=200){
+			if(it->second.gm>it->second.gf)it->second.g=floor(it->second.gf*0.6+it->second.gm*0.4+0.5);
+			else it->second.g=it->second.gf;
+		}
+	}
+	for(map<string,stu>::iterator it=mp.begin();it!=mp.end();it++)
+		if(it->second.gp>=200&&it->second.g>=60)it->second.flag=1;
+	map<string,stu>::iterator it=mp.begin();
+	while(it!=mp.end())
+	{
+		if(it->second.flag==0)it=mp.erase(it);
+		else it++;
+	}
+	vector<pa>v;
+	pa temp_pa;
+	for(map<string,stu>::iterator it=mp.begin();it!=mp.end();it++)
+	{
+		temp_pa.score=it->second.g;
+		temp_pa.str=it->first;
+		v.push_back(temp_pa);
+	}
+	sort(v.begin(),v.end(),cmp);
+	for(int i=0;i<v.size();i++)
+		printf("%s %d %d %d %d\n",v[i].str.c_str(),mp[v[i].str].gp,mp[v[i].str].gm,mp[v[i].str].gf,mp[v[i].str].g);
+    return 0;
+}
